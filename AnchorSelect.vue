@@ -10,7 +10,15 @@
       { value: 'be', label: 'Belgique' },
       { value: 'lu', label: 'Luxembourg', disabled: true },
     ]"
+    hint="Pays de livraison."
+    :error="errors.country"
+    required
   />
+
+  - Erreur : comme AnchorInput, la prop `error` colore le champ, affiche le message (annoncé poliment)
+             et pose aria-invalid ; `hint` est affiché tant qu'il n'y a pas d'erreur.
+  - required : astérisque sur le label + aria-required. La validation reste à faire côté appelant
+               (un <input type="hidden"> n'est jamais validé par le navigateur).
 -->
 <script setup lang="ts" generic="T extends string | number">
 import { nextTick, onBeforeUnmount, onMounted, ref, useId, watch, computed } from 'vue'
@@ -31,6 +39,11 @@ const props = withDefaults(
     disabled?: boolean
     /** Nom accessible quand il n'y a pas de `label` visible (sinon le placeholder est utilisé). */
     ariaLabel?: string
+    /** Texte d'aide sous le champ (remplacé par `error` si présent). */
+    hint?: string
+    /** Message d'erreur : met le champ en erreur. */
+    error?: string
+    required?: boolean
   }>(),
   { placeholder: 'Sélectionner…' },
 )
@@ -47,6 +60,10 @@ const triggerId = `${uid}-trigger`
 const labelId = `${uid}-label`
 const listId = `${uid}-list`
 const optionId = (i: number) => `${uid}-opt-${i}`
+const hintId = `${uid}-hint`
+const errorId = `${uid}-error`
+
+const describedBy = computed(() => (props.error ? errorId : props.hint ? hintId : undefined))
 // Un nom d'ancre unique par instance (dashed-ident) pour pouvoir en afficher plusieurs.
 const anchorName = `--select-${uid.replace(/[^a-zA-Z0-9_-]/g, '')}`
 
@@ -200,6 +217,16 @@ onBeforeUnmount(() => {
   clearTimeout(bufferTimer)
 })
 
+/* ---------- Classes (exclusives : pas de conflit d'ordre CSS Tailwind) ---------- */
+const triggerClass = computed(() =>
+  props.error
+    ? 'border-red-500 focus-visible:border-red-600 focus-visible:ring-red-600/30'
+    : [
+        'border-slate-300 focus-visible:border-teal-600 focus-visible:ring-teal-600/30',
+        props.disabled ? '' : 'hover:border-slate-400',
+      ],
+)
+
 watch(activeIndex, async (i) => {
   if (!open.value || i < 0) return
   await nextTick()
@@ -217,6 +244,7 @@ watch(activeIndex, async (i) => {
       @click.prevent="onLabelClick"
     >
       {{ label }}
+      <span v-if="required" class="text-red-600" aria-hidden="true">*</span>
     </label>
 
     <!-- Le bouton est l'ancre -->
@@ -230,8 +258,12 @@ watch(activeIndex, async (i) => {
       :aria-expanded="open"
       :aria-controls="listId"
       :aria-activedescendant="open && activeIndex >= 0 ? optionId(activeIndex) : undefined"
+      :aria-invalid="error ? true : undefined"
+      :aria-required="required || undefined"
+      :aria-describedby="describedBy"
       :disabled="disabled"
-      class="select-trigger flex w-full items-center justify-between gap-2 rounded-lg border border-slate-300 bg-white px-3 py-2 text-left text-slate-900 shadow-xs outline-none transition-colors hover:border-slate-400 focus-visible:border-teal-600 focus-visible:ring-2 focus-visible:ring-teal-600/30 disabled:cursor-not-allowed disabled:opacity-50"
+      class="select-trigger flex w-full items-center justify-between gap-2 rounded-lg border bg-white px-3 py-2 text-left text-slate-900 shadow-xs outline-none transition-colors focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50"
+      :class="triggerClass"
       @click="toggle"
       @keydown="onKeydown"
       @keyup.space.prevent
@@ -305,6 +337,11 @@ watch(activeIndex, async (i) => {
 
     <!-- disabled : comme un <select disabled>, la valeur n'est pas envoyée avec le formulaire -->
     <input v-if="name" type="hidden" :name="name" :value="model ?? ''" :disabled="disabled" />
+
+    <!-- Zone d'erreur toujours présente : une région live "polite" doit exister avant que son contenu change.
+         Moins intrusif que role="alert", qui interrompt et empile les annonces de tous les champs à l'envoi. -->
+    <p :id="errorId" aria-live="polite" class="text-xs text-red-600" :class="{ 'mt-1.5': error }">{{ error }}</p>
+    <p v-if="hint && !error" :id="hintId" class="mt-1.5 text-xs text-slate-500">{{ hint }}</p>
   </div>
 </template>
 
