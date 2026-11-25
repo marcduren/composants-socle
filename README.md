@@ -14,6 +14,7 @@ Composants Vue 3 accessibles, bâtis sur les éléments natifs du navigateur : `
 
 - [Prérequis](#prérequis)
 - [Installation](#installation)
+- [Démo](#démo)
 - [Principes communs](#principes-communs)
 - [Composants](#socleinput)
 - [Styles partagés](#styles-partagés)
@@ -51,6 +52,19 @@ Le chemin est relatif à cette feuille CSS : adaptez-le à votre projet.
 
 La feuille `socle.css` (animations, ancrage) est importée automatiquement par les composants qui en ont besoin. Rien à ajouter.
 
+## Démo
+
+Le dossier `demo/` contient une application Vite + Vue 3 + Tailwind CSS v4 qui utilise tous les composants : formulaire avec validation, affichage du `v-model` et des données envoyées, boîtes de dialogue modale, non modale et de confirmation.
+
+```sh
+cd demo
+npm install
+npm run dev        # serveur de développement
+npm run build      # vérification des types (vue-tsc) + build de production
+```
+
+Elle importe `socle` directement depuis les sources du dossier parent (alias dans `vite.config.ts`) : toute modification d'un composant est visible immédiatement. `npm run typecheck` vérifie aussi les types des composants eux-mêmes.
+
 ## Principes communs
 
 ### Champs de formulaire
@@ -66,6 +80,7 @@ La feuille `socle.css` (animations, ancrage) est importée automatiquement par l
 | `disabled` | `boolean` | Désactive le champ. |
 | `name` | `string` | Nom du champ pour les envois de formulaire classiques. |
 
+- **Largeur** : un champ occupe toute la largeur de son conteneur. Pour la limiter, passez une classe au composant : elle s'applique à son conteneur (`<SocleInput class="max-w-xs" … />`).
 - **Validation** : elle reste à faire côté appelant. Les composants affichent l'erreur, ils ne la calculent pas.
 - **Annonce des erreurs** : le message est placé dans une zone `aria-live="polite"`, présente en permanence. Les lecteurs d'écran l'annoncent sans interrompre l'utilisateur.
 - **Formulaires classiques** : quand `name` est défini, `SocleSelect` et `SocleDatePicker` rendent un `<input type="hidden">` qui porte la valeur. Ce champ caché est désactivé avec le composant : comme pour un champ natif, sa valeur n'est alors pas envoyée. Le navigateur ne valide jamais un champ caché, d'où la validation côté appelant.
@@ -405,6 +420,7 @@ SocleDatePicker.vue
 SocleDialog.vue
 socle.css             Styles globaux (animations, ancrage)
 classes.ts            Classes Tailwind partagées
+demo/                 Application d'exemple (Vite + Vue 3 + Tailwind)
 ```
 
 ### Conventions

@@ -49,7 +49,7 @@ defineExpose({ root })
 </script>
 
 <template>
-  <div ref="root" class="w-full max-w-xs">
+  <div ref="root" class="w-full">
     <label
       v-if="label"
       :id="labelId"
