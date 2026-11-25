@@ -1,0 +1,128 @@
+/*
+  socle.css — styles communs des composants Socle.
+  Ce qui ne s'exprime pas en utilitaires Tailwind : animations d'ouverture / fermeture,
+  ::backdrop, CSS Anchor Positioning.
+  Styles globaux : toutes les classes sont préfixées par `socle-`.
+  Importé par chaque composant (le bundler ne l'inclut qu'une fois).
+*/
+
+/* ===================== SocleDialog ===================== */
+
+/*
+  Animation d'ouverture / fermeture. `translate` (déplacement) et `scale` (animation)
+  sont deux propriétés indépendantes : glisser la boîte n'est jamais ralenti par une transition.
+  display / overlay en allow-discrete permettent aussi la transition de sortie.
+*/
+.socle-dialog {
+  opacity: 0;
+  scale: 0.97;
+  transition:
+    opacity 150ms ease,
+    scale 150ms ease,
+    display 150ms allow-discrete,
+    overlay 150ms allow-discrete;
+}
+
+.socle-dialog[open] {
+  opacity: 1;
+  scale: 1;
+}
+
+@starting-style {
+  .socle-dialog[open] {
+    opacity: 0;
+    scale: 0.97;
+  }
+}
+
+.socle-dialog::backdrop {
+  background: rgb(15 23 42 / 0.4);
+  opacity: 0;
+  transition:
+    opacity 150ms ease,
+    display 150ms allow-discrete,
+    overlay 150ms allow-discrete;
+}
+
+.socle-dialog[open]::backdrop {
+  opacity: 1;
+}
+
+@starting-style {
+  .socle-dialog[open]::backdrop {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .socle-dialog,
+  .socle-dialog::backdrop {
+    transition: none;
+  }
+}
+
+/* Bloque le défilement de la page tant qu'une boîte modale est ouverte */
+html:has(.socle-dialog:modal) {
+  overflow: hidden;
+}
+
+/* ===================== SocleSelect ===================== */
+
+/*
+  Cœur de l'ancrage : tout le positionnement est déclaratif.
+  --socle-anchor (posée sur le conteneur) est héritée par le bouton ET par la liste.
+*/
+.socle-select-trigger {
+  anchor-name: var(--socle-anchor);
+}
+
+.socle-select-listbox {
+  /* Neutralise les styles par défaut de [popover] (inset: 0; margin: auto) */
+  inset: auto;
+  margin: 0;
+  margin-block: 0.25rem;
+
+  position-anchor: var(--socle-anchor);
+  /* Sous le bouton, bord de début aligné (s'étend vers la fin de ligne) */
+  position-area: block-end span-inline-end;
+  /* Même largeur que le bouton */
+  width: anchor-size(width);
+
+  /* Pas assez de place en bas ? Le navigateur retourne la liste au-dessus,
+     en choisissant le côté qui offre le plus de hauteur. */
+  position-try-order: most-height;
+  position-try-fallbacks: flip-block;
+  /* Masque la liste si le bouton sort de la zone visible (scroll d'un parent) */
+  position-visibility: anchors-visible;
+
+  /* 100% = hauteur de la zone disponible définie par position-area */
+  max-height: min(18rem, 100%);
+
+  /* Animation d'ouverture ; `display` et `overlay` en allow-discrete
+     permettent aussi la transition de sortie. */
+  opacity: 0;
+  translate: 0 -0.25rem;
+  transition:
+    opacity 120ms ease,
+    translate 120ms ease,
+    display 120ms allow-discrete,
+    overlay 120ms allow-discrete;
+}
+
+.socle-select-listbox:popover-open {
+  opacity: 1;
+  translate: 0 0;
+}
+
+@starting-style {
+  .socle-select-listbox:popover-open {
+    opacity: 0;
+    translate: 0 -0.25rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .socle-select-listbox {
+    transition: none;
+  }
+}

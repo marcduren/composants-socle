@@ -23,6 +23,8 @@
 <script setup lang="ts" generic="T extends string | number">
 import { nextTick, onBeforeUnmount, onMounted, ref, useId, watch, computed } from 'vue'
 import SocleField from './SocleField.vue'
+import { fieldBoxClass } from './classes'
+import './socle.css'
 
 export interface SelectOption<V> {
   value: V
@@ -223,12 +225,7 @@ onBeforeUnmount(() => {
 
 /* ---------- Classes (exclusives : pas de conflit d'ordre CSS Tailwind) ---------- */
 const triggerClass = computed(() =>
-  props.error
-    ? 'border-red-500 focus-visible:border-red-600 focus-visible:ring-red-600/30'
-    : [
-        'border-slate-300 focus-visible:border-teal-600 focus-visible:ring-teal-600/30',
-        props.disabled ? '' : 'hover:border-slate-400',
-      ],
+  fieldBoxClass({ focus: 'visible', error: props.error, disabled: props.disabled }),
 )
 
 watch(activeIndex, async (i) => {
@@ -247,7 +244,7 @@ watch(activeIndex, async (i) => {
     :required="required"
     :hint="hint"
     :error="error"
-    :style="{ '--anchor': anchorName }"
+    :style="{ '--socle-anchor': anchorName }"
     @focusout="onFocusOut"
     @label-click="onLabelClick"
   >
@@ -267,7 +264,7 @@ watch(activeIndex, async (i) => {
       :aria-required="required || undefined"
       :aria-describedby="describedBy"
       :disabled="disabled"
-      class="select-trigger flex w-full items-center justify-between gap-2 rounded-lg border bg-white px-3 py-2 text-left text-slate-900 shadow-xs outline-none transition-colors focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50"
+      class="socle-select-trigger flex w-full items-center justify-between gap-2 bg-white py-2 text-left outline-none disabled:cursor-not-allowed disabled:opacity-50"
       :class="triggerClass"
       @click="toggle"
       @keydown="onKeydown"
@@ -299,7 +296,7 @@ watch(activeIndex, async (i) => {
       role="listbox"
       :aria-labelledby="label ? labelId : undefined"
       :aria-label="label ? undefined : (ariaLabel ?? placeholder)"
-      class="select-listbox list-none overflow-y-auto rounded-lg border border-slate-200 bg-white p-1 text-slate-900 shadow-lg"
+      class="socle-select-listbox list-none overflow-y-auto rounded-lg border border-slate-200 bg-white p-1 text-slate-900 shadow-lg"
       @toggle="onToggle"
       @mousedown.prevent
     >
@@ -344,64 +341,3 @@ watch(activeIndex, async (i) => {
     <input v-if="name" type="hidden" :name="name" :value="model ?? ''" :disabled="disabled" />
   </SocleField>
 </template>
-
-<style scoped>
-/*
-  Cœur de l'ancrage : tout le positionnement est déclaratif.
-  --anchor (posée sur le conteneur) est héritée par le bouton ET par la liste.
-*/
-.select-trigger {
-  anchor-name: var(--anchor);
-}
-
-.select-listbox {
-  /* Neutralise les styles par défaut de [popover] (inset: 0; margin: auto) */
-  inset: auto;
-  margin: 0;
-  margin-block: 0.25rem;
-
-  position-anchor: var(--anchor);
-  /* Sous le bouton, bord de début aligné (s'étend vers la fin de ligne) */
-  position-area: block-end span-inline-end;
-  /* Même largeur que le bouton */
-  width: anchor-size(width);
-
-  /* Pas assez de place en bas ? Le navigateur retourne la liste au-dessus,
-     en choisissant le côté qui offre le plus de hauteur. */
-  position-try-order: most-height;
-  position-try-fallbacks: flip-block;
-  /* Masque la liste si le bouton sort de la zone visible (scroll d'un parent) */
-  position-visibility: anchors-visible;
-
-  /* 100% = hauteur de la zone disponible définie par position-area */
-  max-height: min(18rem, 100%);
-
-  /* Animation d'ouverture ; `display` et `overlay` en allow-discrete
-     permettent aussi la transition de sortie. */
-  opacity: 0;
-  translate: 0 -0.25rem;
-  transition:
-    opacity 120ms ease,
-    translate 120ms ease,
-    display 120ms allow-discrete,
-    overlay 120ms allow-discrete;
-}
-
-.select-listbox:popover-open {
-  opacity: 1;
-  translate: 0 0;
-}
-
-@starting-style {
-  .select-listbox:popover-open {
-    opacity: 0;
-    translate: 0 -0.25rem;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .select-listbox {
-    transition: none;
-  }
-}
-</style>

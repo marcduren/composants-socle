@@ -6,14 +6,19 @@
   "main": "./index.ts",
   "exports": {
     ".": "./index.ts",
-    "./*.vue": "./*.vue"
+    "./*.vue": "./*.vue",
+    "./socle.css": "./socle.css",
+    "./classes": "./classes.ts"
   },
   "files": [
     "index.ts",
-    "*.vue"
+    "classes.ts",
+    "*.vue",
+    "socle.css"
   ],
   "sideEffects": [
-    "*.vue"
+    "*.vue",
+    "*.css"
   ],
   "keywords": [
     "vue",

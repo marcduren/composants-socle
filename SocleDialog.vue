@@ -22,6 +22,7 @@
 -->
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref, useId, watch } from 'vue'
+import './socle.css'
 
 interface Labels {
   close: string
@@ -198,7 +199,7 @@ onBeforeUnmount(() => window.removeEventListener('resize', onResize))
     ref="dialog"
     :aria-labelledby="title || $slots.title ? titleId : undefined"
     :class="!modal && 'fixed inset-0 z-50'"
-    class="dlg m-auto max-h-[min(40rem,calc(100dvh-2rem))] flex-col rounded-xl border border-slate-200 bg-white p-0 text-slate-900 shadow-xl open:flex"
+    class="socle-dialog m-auto max-h-[min(40rem,calc(100dvh-2rem))] flex-col rounded-xl border border-slate-200 bg-white p-0 text-slate-900 shadow-xl open:flex"
     :style="{
       width,
       maxWidth: 'calc(100vw - 2rem)',
@@ -247,63 +248,3 @@ onBeforeUnmount(() => window.removeEventListener('resize', onResize))
     </footer>
   </dialog>
 </template>
-
-<style scoped>
-/*
-  Animation d'ouverture / fermeture. `translate` (déplacement) et `scale` (animation)
-  sont deux propriétés indépendantes : glisser la boîte n'est jamais ralenti par une transition.
-  display / overlay en allow-discrete permettent aussi la transition de sortie.
-*/
-.dlg {
-  opacity: 0;
-  scale: 0.97;
-  transition:
-    opacity 150ms ease,
-    scale 150ms ease,
-    display 150ms allow-discrete,
-    overlay 150ms allow-discrete;
-}
-
-.dlg[open] {
-  opacity: 1;
-  scale: 1;
-}
-
-@starting-style {
-  .dlg[open] {
-    opacity: 0;
-    scale: 0.97;
-  }
-}
-
-.dlg::backdrop {
-  background: rgb(15 23 42 / 0.4);
-  opacity: 0;
-  transition:
-    opacity 150ms ease,
-    display 150ms allow-discrete,
-    overlay 150ms allow-discrete;
-}
-
-.dlg[open]::backdrop {
-  opacity: 1;
-}
-
-@starting-style {
-  .dlg[open]::backdrop {
-    opacity: 0;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .dlg,
-  .dlg::backdrop {
-    transition: none;
-  }
-}
-
-/* Bloque le défilement de la page tant qu'une boîte modale est ouverte */
-:global(html:has(.dlg:modal)) {
-  overflow: hidden;
-}
-</style>

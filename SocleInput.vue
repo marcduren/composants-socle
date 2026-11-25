@@ -21,6 +21,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, useAttrs, useId, watch } from 'vue'
 import SocleField from './SocleField.vue'
+import { fieldBoxClass } from './classes'
 
 defineOptions({ inheritAttrs: false })
 
@@ -109,13 +110,8 @@ const onCompositionEnd = (e: CompositionEvent) => {
 
 /* ---------- Classes (exclusives : pas de conflit d'ordre CSS Tailwind) ---------- */
 const boxClass = computed(() => [
+  fieldBoxClass({ focus: 'within', error: props.error, disabled: props.disabled }),
   props.readonly ? 'bg-slate-50' : 'bg-white',
-  props.error
-    ? 'border-red-500 focus-within:border-red-600 focus-within:ring-red-600/30'
-    : [
-        'border-slate-300 focus-within:border-teal-600 focus-within:ring-teal-600/30',
-        props.disabled ? '' : 'hover:border-slate-400',
-      ],
   props.disabled ? 'cursor-not-allowed opacity-50' : '',
 ])
 </script>
@@ -133,7 +129,7 @@ const boxClass = computed(() => [
   >
     <!-- Le conteneur porte la bordure : le focus d'un seul <input> l'éclaire en entier -->
     <div
-      class="flex items-center gap-2 rounded-lg border px-3 text-slate-900 shadow-xs transition-colors focus-within:ring-2"
+      class="flex items-center gap-2"
       :class="boxClass"
     >
       <span v-if="$slots.prefix" class="flex shrink-0 items-center text-slate-500">
