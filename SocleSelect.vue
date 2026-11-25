@@ -1,7 +1,7 @@
 <!--
   Prérequis : Vue >= 3.5 (useId, generics), Tailwind CSS v4.
 
-  <AnchorSelect
+  <SocleSelect
     v-model="country"
     label="Pays"
     name="country"
@@ -15,7 +15,7 @@
     required
   />
 
-  - Erreur : comme AnchorInput, la prop `error` colore le champ, affiche le message (annoncé poliment)
+  - Erreur : comme SocleInput, la prop `error` colore le champ, affiche le message (annoncé poliment)
              et pose aria-invalid ; `hint` est affiché tant qu'il n'y a pas d'erreur.
   - required : astérisque sur le label + aria-required. La validation reste à faire côté appelant
                (un <input type="hidden"> n'est jamais validé par le navigateur).

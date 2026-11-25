@@ -1,6 +1,6 @@
 <!--
   Prérequis : Vue >= 3.5 (useId, defineModel), Tailwind CSS v4.
-  <AnchorInput
+  <SocleInput
     v-model.trim="email"
     label="E-mail"
     type="email"

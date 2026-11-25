@@ -1,0 +1,31 @@
+{
+  "name": "socle",
+  "version": "0.1.0",
+  "description": "Composants Vue 3 accessibles, bâtis sur les éléments natifs du navigateur (<dialog>, popover, CSS Anchor Positioning).",
+  "type": "module",
+  "main": "./index.ts",
+  "exports": {
+    ".": "./index.ts",
+    "./*.vue": "./*.vue"
+  },
+  "files": [
+    "index.ts",
+    "*.vue"
+  ],
+  "sideEffects": [
+    "*.vue"
+  ],
+  "keywords": [
+    "vue",
+    "components",
+    "tailwindcss",
+    "accessibility",
+    "dialog",
+    "popover",
+    "anchor-positioning"
+  ],
+  "peerDependencies": {
+    "tailwindcss": "^4.0.0",
+    "vue": "^3.5.0"
+  }
+}

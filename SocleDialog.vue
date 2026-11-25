@@ -1,5 +1,5 @@
 <!--
-  AnchorDialog.vue
+  SocleDialog.vue
   Boîte de dialogue déplaçable : on la déplace en faisant glisser son titre.
   Basée sur l'élément natif <dialog> (top layer, focus piégé en mode modal, Échap natif).
   En mode non modal, la boîte n'est pas dans le top layer : elle est passée en position fixed
@@ -12,13 +12,13 @@
   - Slots       : défaut (contenu), `title` (titre riche), `footer` (boutons d'action).
 
   Prérequis : Vue >= 3.5 (useId), Tailwind CSS v4.
-  <AnchorDialog v-model="open" title="Modifier le profil" width="30rem">
+  <SocleDialog v-model="open" title="Modifier le profil" width="30rem">
     <p>Contenu de la boîte…</p>
     <template #footer>
       <button @click="open = false">Annuler</button>
       <button class="rounded-md bg-teal-600 px-3 py-1.5 text-sm text-white">Enregistrer</button>
     </template>
-  </AnchorDialog>
+  </SocleDialog>
 -->
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref, useId, watch } from 'vue'
