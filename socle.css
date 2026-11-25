@@ -126,3 +126,59 @@ html:has(.socle-dialog:modal) {
     transition: none;
   }
 }
+
+/* ===================== SocleDatePicker ===================== */
+
+/*
+  Ancrage : --socle-anchor (posée sur le conteneur) est héritée par le bouton ET par le popover.
+*/
+.socle-datepicker-trigger {
+  anchor-name: var(--socle-anchor);
+}
+
+.socle-datepicker-popover {
+  /* Neutralise les styles par défaut de [popover] (inset: 0; margin: auto) */
+  inset: auto;
+  margin: 0;
+  margin-block: 0.25rem;
+
+  position-anchor: var(--socle-anchor);
+  /* Sous le bouton, bord de début aligné (s'étend vers la fin de ligne) */
+  position-area: block-end span-inline-end;
+
+  /* Taille fixe du calendrier (7 colonnes de 2.25rem + padding) */
+  width: 19.5rem;
+  max-width: calc(100vw - 1rem);
+
+  /* Pas de place en bas → au-dessus ; pas de place à droite → aligné à droite du bouton. */
+  position-try-fallbacks: flip-block, flip-inline, flip-block flip-inline;
+  /* Masque le calendrier si le bouton sort de la zone visible (scroll d'un parent) */
+  position-visibility: anchors-visible;
+
+  /* Animation d'ouverture ; display/overlay en allow-discrete permettent aussi la sortie. */
+  opacity: 0;
+  translate: 0 -0.25rem;
+  transition:
+    opacity 120ms ease,
+    translate 120ms ease,
+    display 120ms allow-discrete,
+    overlay 120ms allow-discrete;
+}
+
+.socle-datepicker-popover:popover-open {
+  opacity: 1;
+  translate: 0 0;
+}
+
+@starting-style {
+  .socle-datepicker-popover:popover-open {
+    opacity: 0;
+    translate: 0 -0.25rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .socle-datepicker-popover {
+    transition: none;
+  }
+}

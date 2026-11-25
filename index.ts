@@ -1,3 +1,4 @@
+export { default as SocleDatePicker } from './SocleDatePicker.vue'
 export { default as SocleDialog } from './SocleDialog.vue'
 export { default as SocleField } from './SocleField.vue'
 export { default as SocleInput } from './SocleInput.vue'
