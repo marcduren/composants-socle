@@ -125,7 +125,12 @@ function typeahead(char: string) {
   bufferTimer = setTimeout(() => (buffer = ''), 500)
 
   const n = props.options.length
-  const start = Math.max(activeIndex.value, 0) + (buffer.length === 1 ? 1 : 0)
+  if (n === 0) return
+  // Point de départ : option active si la liste est ouverte, sinon option sélectionnée.
+  // Sans point de départ, on cherche dès la première option ; sinon un premier caractère
+  // passe à l'option suivante (taper « b » plusieurs fois parcourt les options en « b »).
+  const base = open.value ? activeIndex.value : selectedIndex.value
+  const start = base < 0 ? 0 : base + (buffer.length === 1 ? 1 : 0)
   for (let k = 0; k < n; k++) {
     const i = (start + k) % n
     const o = props.options[i]!
