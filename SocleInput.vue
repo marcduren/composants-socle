@@ -20,6 +20,7 @@
 -->
 <script setup lang="ts">
 import { computed, onMounted, ref, useAttrs, useId, watch } from 'vue'
+import SocleField from './SocleField.vue'
 
 defineOptions({ inheritAttrs: false })
 
@@ -56,10 +57,6 @@ const uid = useId()
 // Un `id` passé en attribut est repris (utile pour un <label for> externe).
 const attrs = useAttrs()
 const inputId = computed(() => (attrs.id as string | undefined) ?? `${uid}-input`)
-const hintId = `${uid}-hint`
-const errorId = `${uid}-error`
-
-const describedBy = computed(() => (props.error ? errorId : props.hint ? hintId : undefined))
 
 /* ---------- Valeur affichée ----------
   Pas de `:value` : il réécrirait le champ à chaque différence et casserait la frappe
@@ -124,16 +121,16 @@ const boxClass = computed(() => [
 </script>
 
 <template>
-  <div class="w-full max-w-xs" :class="$attrs.class" :style="$attrs.style as any">
-    <label
-      v-if="label"
-      :for="inputId"
-      class="mb-1.5 block text-sm font-medium text-slate-700"
-    >
-      {{ label }}
-      <span v-if="required" class="text-red-600" aria-hidden="true">*</span>
-    </label>
-
+  <SocleField
+    v-slot="{ describedBy }"
+    :control-id="inputId"
+    :label="label"
+    :required="required"
+    :hint="hint"
+    :error="error"
+    :class="$attrs.class"
+    :style="$attrs.style as any"
+  >
     <!-- Le conteneur porte la bordure : le focus d'un seul <input> l'éclaire en entier -->
     <div
       class="flex items-center gap-2 rounded-lg border px-3 text-slate-900 shadow-xs transition-colors focus-within:ring-2"
@@ -166,10 +163,5 @@ const boxClass = computed(() => [
         <slot name="suffix" />
       </span>
     </div>
-
-    <!-- Zone d'erreur toujours présente : une région live "polite" doit exister avant que son contenu change.
-         Moins intrusif que role="alert", qui interrompt et empile les annonces de tous les champs à l'envoi. -->
-    <p :id="errorId" aria-live="polite" class="text-xs text-red-600" :class="{ 'mt-1.5': error }">{{ error }}</p>
-    <p v-if="hint && !error" :id="hintId" class="mt-1.5 text-xs text-slate-500">{{ hint }}</p>
-  </div>
+  </SocleField>
 </template>

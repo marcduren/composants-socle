@@ -22,6 +22,7 @@
 -->
 <script setup lang="ts" generic="T extends string | number">
 import { nextTick, onBeforeUnmount, onMounted, ref, useId, watch, computed } from 'vue'
+import SocleField from './SocleField.vue'
 
 export interface SelectOption<V> {
   value: V
@@ -57,18 +58,14 @@ defineSlots<{
 /* ---------- Identifiants ---------- */
 const uid = useId()
 const triggerId = `${uid}-trigger`
-const labelId = `${uid}-label`
 const listId = `${uid}-list`
 const optionId = (i: number) => `${uid}-opt-${i}`
-const hintId = `${uid}-hint`
-const errorId = `${uid}-error`
-
-const describedBy = computed(() => (props.error ? errorId : props.hint ? hintId : undefined))
 // Un nom d'ancre unique par instance (dashed-ident) pour pouvoir en afficher plusieurs.
 const anchorName = `--select-${uid.replace(/[^a-zA-Z0-9_-]/g, '')}`
 
 /* ---------- État ---------- */
-const root = ref<HTMLElement | null>(null)
+const field = ref<InstanceType<typeof SocleField> | null>(null)
+const root = computed(() => field.value?.root ?? null)
 const trigger = ref<HTMLButtonElement | null>(null)
 const listbox = ref<HTMLElement | null>(null)
 const open = ref(false)
@@ -200,8 +197,10 @@ function onFocusOut(e: FocusEvent) {
   if (!root.value?.contains(e.relatedTarget as Node | null)) hide()
 }
 
-/** Comme un <select> natif, un clic sur le label donne le focus sans ouvrir la liste. */
-function onLabelClick() {
+/** Comme un <select> natif, un clic sur le label donne le focus sans ouvrir la liste
+ *  (par défaut, cliquer le label d'un <button> déclencherait un clic dessus). */
+function onLabelClick(e: MouseEvent) {
+  e.preventDefault()
   trigger.value?.focus()
 }
 
@@ -240,17 +239,18 @@ watch(activeIndex, async (i) => {
 </script>
 
 <template>
-  <div ref="root" class="w-full max-w-xs" :style="{ '--anchor': anchorName }" @focusout="onFocusOut">
-    <label
-      v-if="label"
-      :id="labelId"
-      :for="triggerId"
-      class="mb-1.5 block text-sm font-medium text-slate-700"
-      @click.prevent="onLabelClick"
-    >
-      {{ label }}
-      <span v-if="required" class="text-red-600" aria-hidden="true">*</span>
-    </label>
+  <SocleField
+    ref="field"
+    v-slot="{ labelId, describedBy }"
+    :control-id="triggerId"
+    :label="label"
+    :required="required"
+    :hint="hint"
+    :error="error"
+    :style="{ '--anchor': anchorName }"
+    @focusout="onFocusOut"
+    @label-click="onLabelClick"
+  >
 
     <!-- Le bouton est l'ancre -->
     <button
@@ -342,12 +342,7 @@ watch(activeIndex, async (i) => {
 
     <!-- disabled : comme un <select disabled>, la valeur n'est pas envoyée avec le formulaire -->
     <input v-if="name" type="hidden" :name="name" :value="model ?? ''" :disabled="disabled" />
-
-    <!-- Zone d'erreur toujours présente : une région live "polite" doit exister avant que son contenu change.
-         Moins intrusif que role="alert", qui interrompt et empile les annonces de tous les champs à l'envoi. -->
-    <p :id="errorId" aria-live="polite" class="text-xs text-red-600" :class="{ 'mt-1.5': error }">{{ error }}</p>
-    <p v-if="hint && !error" :id="hintId" class="mt-1.5 text-xs text-slate-500">{{ hint }}</p>
-  </div>
+  </SocleField>
 </template>
 
 <style scoped>
