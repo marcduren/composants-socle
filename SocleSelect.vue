@@ -159,16 +159,11 @@ function onKeydown(e: KeyboardEvent) {
       activeIndex.value = e.key === 'Home' ? nextEnabled(-1, 1) : nextEnabled(props.options.length, -1)
       break
     case ' ':
-      // Recherche en cours (« new y » → « New York ») : l'espace fait partie du texte cherché.
-      if (buffer) {
-        e.preventDefault()
-        typeahead(' ')
-        break
-      }
-    // fallthrough
     case 'Enter':
       e.preventDefault()
-      if (!open.value) show()
+      // Recherche en cours (« new y » → « New York ») : l'espace fait partie du texte cherché.
+      if (e.key === ' ' && buffer) typeahead(' ')
+      else if (!open.value) show()
       else choose(activeIndex.value)
       break
     case 'Escape':

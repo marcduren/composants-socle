@@ -1,6 +1,6 @@
 {
   "name": "socle",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Composants Vue 3 accessibles, bâtis sur les éléments natifs du navigateur (<dialog>, popover, CSS Anchor Positioning).",
   "type": "module",
   "main": "./index.ts",
