@@ -73,7 +73,7 @@ Puis dans l'application :
 npm install ../chemin/vers/socle-0.1.1.tgz
 ```
 
-L'archive ne contient que les fichiers listés dans le champ `files` du `package.json` : composants, `index.ts`, `classes.ts` et `socle.css`.
+L'archive ne contient que les fichiers listés dans le champ `files` du `package.json` : composants, `index.ts`, `classes.ts`, `table.ts` et `socle.css`.
 
 ## 3. Configurer Vite
 

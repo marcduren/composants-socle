@@ -8,11 +8,13 @@
     ".": "./index.ts",
     "./*.vue": "./*.vue",
     "./socle.css": "./socle.css",
-    "./classes": "./classes.ts"
+    "./classes": "./classes.ts",
+    "./table": "./table.ts"
   },
   "files": [
     "index.ts",
     "classes.ts",
+    "table.ts",
     "*.vue",
     "socle.css"
   ],
@@ -27,6 +29,7 @@
     "accessibility",
     "dialog",
     "popover",
+    "table",
     "anchor-positioning"
   ],
   "peerDependencies": {

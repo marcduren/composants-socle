@@ -182,3 +182,12 @@ html:has(.socle-dialog:modal) {
     transition: none;
   }
 }
+
+/* ===================== SocleTableHead ===================== */
+
+/* Pendant un redimensionnement : curseur partout et pas de sélection de texte. */
+html.socle-table-resizing,
+html.socle-table-resizing * {
+  cursor: col-resize !important;
+  user-select: none !important;
+}
