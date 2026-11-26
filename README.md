@@ -8,6 +8,7 @@ Composants Vue 3 accessibles, bâtis sur les éléments natifs du navigateur : `
 | [`SocleSelect`](#socleselect) | Liste déroulante personnalisée (combobox) |
 | [`SocleDatePicker`](#socledatepicker) | Sélecteur de date avec calendrier |
 | [`SocleDialog`](#socledialog) | Boîte de dialogue déplaçable, modale ou non |
+| [`SoclePopover`](#soclepopover) | Panneau flottant ancré à un bouton (menu, aide, petit formulaire) |
 | [`SocleTableHead`](#socletablehead) | En-têtes de tableau : colonnes redimensionnables et triables |
 | [`SocleField`](#soclefield) | Habillage commun d'un champ : label, aide, erreur |
 
@@ -26,14 +27,14 @@ Composants Vue 3 accessibles, bâtis sur les éléments natifs du navigateur : `
 - **Vue ≥ 3.5** (`useId`, `defineModel`, composants génériques).
 - **Tailwind CSS v4**.
 - Un bundler qui compile les SFC et le TypeScript (Vite + `@vitejs/plugin-vue`, par exemple). Le paquet est distribué en sources (`.vue`, `.ts`), sans étape de build.
-- Un navigateur récent qui prend en charge `<dialog>`, l'attribut `popover`, le CSS Anchor Positioning et `@starting-style`.
+- Un navigateur récent qui prend en charge `<dialog>`, l'attribut `popover`, le CSS Anchor Positioning et `@starting-style`. La flèche de `SoclePopover` demande en plus les requêtes de conteneur ancré (`container-type: anchored`) : sans elles, elle est simplement masquée.
 
 ## Installation
 
 > Le guide [INTEGRATION.md](INTEGRATION.md) détaille l'intégration dans un projet Vite + Vue + Tailwind, étape par étape : installation du paquet, configuration de Vite, Tailwind et TypeScript, et problèmes fréquents.
 
 ```ts
-import { SocleInput, SocleSelect, SocleDatePicker, SocleDialog } from 'socle'
+import { SocleInput, SocleSelect, SocleDatePicker, SocleDialog, SoclePopover } from 'socle'
 ```
 
 Chaque composant peut aussi être importé seul :
@@ -57,7 +58,7 @@ La feuille `socle.css` (animations, ancrage) est importée automatiquement par l
 
 ## Démo
 
-Le dossier `demo/` contient une application Vite + Vue 3 + Tailwind CSS v4 qui utilise tous les composants : formulaire avec validation, affichage du `v-model` et des données envoyées, tableau triable aux colonnes redimensionnables, boîtes de dialogue modale, non modale et de confirmation.
+Le dossier `demo/` contient une application Vite + Vue 3 + Tailwind CSS v4 qui utilise tous les composants : formulaire avec validation, affichage du `v-model` et des données envoyées, tableau triable aux colonnes redimensionnables, popovers (placements, menu, filtres persistants), boîtes de dialogue modale, non modale et de confirmation.
 
 ```sh
 cd demo
@@ -345,6 +346,68 @@ Boîte de dialogue basée sur l'élément natif `<dialog>`. On la déplace en fa
 
 ---
 
+## SoclePopover
+
+Panneau flottant ancré à un bouton : menu d'actions, aide contextuelle, petit formulaire. Le comportement est entièrement natif : aucun JavaScript de positionnement ni de gestion des clics.
+
+```vue
+<SoclePopover placement="bottom" align="start" role="dialog" aria-label="Filtres" class="w-72">
+  <template #trigger="{ props }">
+    <button v-bind="props" type="button">Filtres</button>
+  </template>
+  <p>Contenu du panneau…</p>
+</SoclePopover>
+```
+
+Le bouton déclencheur est le vôtre : liez-lui `props` avec `v-bind`. Ces props posent `popovertarget` (le navigateur gère alors seul l'ouverture au clic et `aria-expanded`) et `anchor-name` (le panneau s'y ancre).
+
+### Props
+
+| Prop | Type | Défaut | Description |
+| --- | --- | --- | --- |
+| `placement` | `'top' \| 'bottom' \| 'left' \| 'right'` | `'bottom'` | Côté du bouton où s'ouvre le panneau. Retourné automatiquement si la place manque. |
+| `align` | `'start' \| 'center' \| 'end'` | `'center'` | Alignement sur l'autre axe : `start` aligne sur le bord gauche (ou haut) du bouton, `end` sur le bord droit (ou bas). |
+| `arrow` | `boolean` | `true` | Flèche pointant vers le bouton. |
+| `persistent` | `boolean` | `false` | Le panneau ne se ferme ni par un clic extérieur, ni à l'ouverture d'un autre popover. `Échap`, le bouton et le v-model le ferment toujours. |
+
+### Attributs transmis
+
+`class`, `style` et tout attribut non déclaré vont sur le panneau, et non sur le bouton : largeur (`class="w-72"`), `role="dialog"` et `aria-label` quand le panneau contient un formulaire, `id`… Les variables CSS suivantes s'y posent aussi :
+
+| Variable | Défaut | Description |
+| --- | --- | --- |
+| `--socle-popover-padding` | `0.75rem` | Marge intérieure du contenu. |
+| `--socle-popover-offset` | `0.75rem` avec flèche, `0.375rem` sans | Écart entre le bouton et le panneau. |
+| `--socle-popover-max-width` | `min(24rem, 100vw - 1rem)` | Largeur maximale. |
+| `--socle-popover-arrow-size` | `0.75rem` | Taille de la flèche. |
+
+```vue
+<SoclePopover class="w-48 [--socle-popover-padding:0.25rem]" :arrow="false">…</SoclePopover>
+```
+
+### v-model
+
+- **Valeur** : `boolean`, le panneau est ouvert ou fermé. Facultatif : sans v-model, le popover fonctionne seul.
+- **Synchronisation** : le v-model suit toutes les fermetures natives (bouton, `Échap`, clic extérieur).
+- **Méthodes exposées** : `show()`, `hide()` et `toggle()`, via une ref de composant.
+
+### Slots
+
+| Slot | Props | Description |
+| --- | --- | --- |
+| `trigger` | `{ props, open }` | Bouton déclencheur. `props` est à lier avec `v-bind` ; `open` indique si le panneau est ouvert. |
+| *(défaut)* | | Contenu du panneau, avec défilement s'il dépasse. |
+
+### Fonctionnement
+
+- **Fermeture** : `Échap` ou un clic en dehors (« light dismiss »). Ouvrir un autre popover ferme le précédent, sauf s'il le contient. Une liste `SocleSelect` ou un calendrier `SocleDatePicker` placés dans le panneau ne le ferment pas.
+- **Focus** : le focus reste sur le bouton à l'ouverture. `Tab` entre ensuite dans le panneau, même si celui-ci est loin dans le DOM. À la fermeture, le focus revient au bouton s'il était dans le panneau. Un `autofocus` dans le contenu est respecté.
+- **Placement** : `position-area` place le panneau, `position-try-fallbacks` le retourne (haut ↔ bas, gauche ↔ droite) quand la place manque. Le panneau est masqué si le bouton sort de la zone visible (`position-visibility`).
+- **Flèche** : les requêtes de conteneur ancré (`@container anchored(fallback: …)`) indiquent quel repli le navigateur a choisi : la flèche passe du côté du bouton. Ces règles sont injectées une seule fois par le composant (feuille adoptée), car les minifieurs CSS comme Lightning CSS ne savent pas encore les lire.
+- **Animation** : fondu et léger zoom, à l'ouverture comme à la fermeture (`@starting-style`, `transition-behavior: allow-discrete`).
+
+---
+
 ## SocleTableHead
 
 Ligne d'en-têtes d'un tableau, à placer entre `<thead>` et `</thead>`. Les colonnes se redimensionnent à la souris, au doigt ou au clavier, et se trient d'un clic sur leur en-tête. Le composant ne trie pas les lignes : il tient à jour l'état du tri, et l'appelant trie ses données, avec `sortRows()` ou sa propre fonction. Le `name` de chaque colonne fait le lien entre les deux.
@@ -513,7 +576,7 @@ Habillage commun d'un champ de formulaire : label (avec astérisque si requis), 
 
 Contient ce qui ne s'exprime pas en utilitaires Tailwind : les animations d'ouverture et de fermeture, le `::backdrop` du dialogue et le CSS Anchor Positioning des popovers. Chaque composant qui en a besoin l'importe, et le bundler ne l'inclut qu'une fois.
 
-Ces styles sont globaux, d'où le préfixe `socle-` sur tous les sélecteurs : `.socle-dialog`, `.socle-select-trigger`, `.socle-select-listbox`, `.socle-datepicker-trigger`, `.socle-datepicker-popover`, `.socle-table-resizing` (posée sur `<html>` pendant un redimensionnement de colonne), et la variable `--socle-anchor`.
+Ces styles sont globaux, d'où le préfixe `socle-` sur tous les sélecteurs : `.socle-dialog`, `.socle-select-trigger`, `.socle-select-listbox`, `.socle-datepicker-trigger`, `.socle-datepicker-popover`, `.socle-popover`, `.socle-popover-body`, `.socle-popover-arrow`, `.socle-table-resizing` (posée sur `<html>` pendant un redimensionnement de colonne), et la variable `--socle-anchor`.
 
 Les animations sont désactivées quand l'utilisateur a demandé à réduire les animations (`prefers-reduced-motion`).
 
@@ -544,6 +607,7 @@ SocleInput.vue
 SocleSelect.vue
 SocleDatePicker.vue
 SocleDialog.vue
+SoclePopover.vue      Panneau flottant ancré (popover + anchor positioning)
 SocleTableHead.vue    En-têtes de tableau redimensionnables et triables
 table.ts              Types des colonnes et fonction de tri sortRows()
 socle.css             Styles globaux (animations, ancrage)

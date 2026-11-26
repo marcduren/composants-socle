@@ -5,9 +5,12 @@ import {
   SocleDialog,
   SocleField,
   SocleInput,
+  SoclePopover,
   SocleSelect,
   SocleTableHead,
   sortRows,
+  type PopoverAlign,
+  type PopoverPlacement,
   type SelectOption,
   type TableColumn,
   type TableSort,
@@ -93,6 +96,14 @@ function confirm(answer: string) {
   lastAction.value = answer
   confirmOpen.value = false
 }
+
+/* ---------- Popovers ---------- */
+const placements: PopoverPlacement[] = ['top', 'right', 'bottom', 'left']
+const aligns: PopoverAlign[] = ['start', 'center', 'end']
+const placement = ref<PopoverPlacement>('bottom')
+const align = ref<PopoverAlign>('center')
+const filtersOpen = ref(false)
+const filters = reactive({ country: null as string | null, onlyLate: false })
 
 /* ---------- Tableau ---------- */
 interface Order {
@@ -284,6 +295,70 @@ const btnSecondary = `${btn} border border-slate-300 bg-white text-slate-700 hov
             <pre class="overflow-x-auto rounded-lg bg-teal-950 p-3 text-xs text-teal-50">{{ JSON.stringify(submitted, null, 2) }}</pre>
           </div>
         </aside>
+      </div>
+    </section>
+
+    <!-- ===================== Popovers ===================== -->
+    <section class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+      <h2 class="mb-2 text-lg font-semibold">Popovers</h2>
+      <p class="mb-4 text-sm text-slate-600">
+        API Popover et CSS Anchor Positioning : clic extérieur ou Échap pour fermer. Quand la place manque, le
+        panneau se retourne et la flèche suit (requêtes de conteneur ancré).
+      </p>
+
+      <div class="grid gap-6 sm:grid-cols-[1fr_auto]">
+        <div class="flex flex-wrap items-start gap-4">
+          <SoclePopover :placement="placement" :align="align" role="dialog" aria-label="Exemple de placement">
+            <template #trigger="{ props }">
+              <button v-bind="props" type="button" :class="btnPrimary">Placement : {{ placement }} / {{ align }}</button>
+            </template>
+            <p class="w-56 text-slate-600">
+              Faites défiler la page pour voir le panneau se retourner quand il touche le bord de la fenêtre.
+            </p>
+          </SoclePopover>
+
+          <SoclePopover placement="bottom" align="start" :arrow="false" class="w-48 [--socle-popover-padding:0.25rem]">
+            <template #trigger="{ props, open }">
+              <button v-bind="props" type="button" :class="btnSecondary">
+                Actions <span aria-hidden="true">{{ open ? '▴' : '▾' }}</span>
+              </button>
+            </template>
+            <ul class="grid">
+              <li v-for="a in ['Dupliquer', 'Archiver', 'Exporter en CSV']" :key="a">
+                <button
+                  type="button"
+                  class="w-full cursor-pointer rounded-md px-2.5 py-1.5 text-left outline-none hover:bg-slate-100 focus-visible:bg-slate-100"
+                  @click="lastAction = a"
+                >
+                  {{ a }}
+                </button>
+              </li>
+            </ul>
+          </SoclePopover>
+
+          <SoclePopover v-model="filtersOpen" persistent align="end" role="dialog" aria-label="Filtres" class="w-72">
+            <template #trigger="{ props }">
+              <button v-bind="props" type="button" :class="btnSecondary">Filtres (persistant)</button>
+            </template>
+            <div class="grid gap-3">
+              <SocleSelect v-model="filters.country" label="Pays" :options="countries" />
+              <label class="flex items-center gap-2 text-slate-600">
+                <input v-model="filters.onlyLate" type="checkbox" class="size-4 accent-teal-600" />
+                En retard uniquement
+              </label>
+              <div class="flex justify-end">
+                <button type="button" :class="btnPrimary" @click="filtersOpen = false">Appliquer</button>
+              </div>
+            </div>
+          </SoclePopover>
+
+          <span v-if="lastAction" class="self-center text-sm text-slate-600">Dernière action : <strong>{{ lastAction }}</strong></span>
+        </div>
+
+        <div class="grid content-start gap-3 text-sm sm:w-56">
+          <SocleSelect v-model="placement" label="placement" :options="placements.map((p) => ({ value: p, label: p }))" />
+          <SocleSelect v-model="align" label="align" :options="aligns.map((a) => ({ value: a, label: a }))" />
+        </div>
       </div>
     </section>
 
