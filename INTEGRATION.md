@@ -43,11 +43,13 @@ Socle n'est pas publié sur le registre npm. Trois façons de l'installer, selon
 ### Depuis le dépôt Git (recommandé pour une application)
 
 ```sh
-npm install "git+https://git-codecommit.eu-west-3.amazonaws.com/v1/repos/composants-socle#<tag-ou-commit>"
+npm install "github:marcduren/composants-socle#<tag-ou-commit>"
+# forme longue équivalente :
+# npm install "git+https://github.com/marcduren/composants-socle.git#<tag-ou-commit>"
 ```
 
 - Indiquez un tag ou un commit après `#` pour figer la version. Sans cela, `npm install` peut récupérer une autre version d'une machine à l'autre.
-- Le dépôt est sur AWS CodeCommit : la machine qui installe (poste de développement, CI) doit avoir des identifiants Git valides pour ce dépôt (assistant d'identification AWS ou identifiants HTTPS Git).
+- Le dépôt est public sur GitHub ([marcduren/composants-socle](https://github.com/marcduren/composants-socle)) : aucune authentification n'est nécessaire pour l'installer.
 
 ### Depuis un dossier local (pour développer Socle et l'application en même temps)
 
@@ -206,4 +208,4 @@ Le détail des props, slots et événements de chaque composant est dans le [REA
 | `[plugin:vite:vue]` ou `Unknown file extension ".vue"` | Plugin Vue absent | Ajouter `@vitejs/plugin-vue` dans `vite.config.ts` |
 | `Cannot find module 'socle/…'` dans l'éditeur ou `vue-tsc` | Résolution de modules inadaptée | `"moduleResolution": "Bundler"` ([étape 5](#5-configurer-typescript)) |
 | Erreurs `vue-tsc` dans les fichiers de Socle | Options TypeScript plus strictes que celles de la démo | Signaler l'erreur sur le dépôt de Socle. En attendant, corriger localement ou assouplir l'option concernée |
-| `npm install` échoue sur l'URL Git (403, authentification) | Pas d'identifiants pour CodeCommit | Configurer les identifiants Git AWS sur la machine ou dans la CI |
+| `npm install` échoue sur l'URL Git | Git absent de la machine, ou tag / commit inexistant après `#` | Installer Git, vérifier la référence sur [GitHub](https://github.com/marcduren/composants-socle) |
