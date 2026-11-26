@@ -403,7 +403,7 @@ interface TableColumn<R> {
   type?: 'string' | 'date' | 'number'  // défaut 'string' ; 'number' est aligné à droite
   sortable?: boolean                   // défaut false
   width?: number                       // largeur initiale en px, défaut 160
-  minWidth?: number                    // défaut 48
+  minWidth?: number                    // défaut 80
   maxWidth?: number                    // pas de limite par défaut
   resizable?: boolean                  // défaut true
   value?: (row: R) => unknown          // valeur triée, si ce n'est pas row[name]

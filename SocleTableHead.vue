@@ -120,7 +120,8 @@ watchEffect(() => {
 
 /* ---------- Redimensionnement à la souris / au doigt ---------- */
 const resizing = ref<string | null>(null)
-let drag: { startX: number; startWidth: number; sign: 1 | -1 } | null = null
+/** État du glisser ; `startWidths` permet à Échap de rendre le v-model tel qu'il était. */
+let drag: { startX: number; startWidth: number; startWidths: Record<string, number>; sign: 1 | -1 } | null = null
 
 function onResizeStart(e: PointerEvent, c: TableColumn<R>) {
   if (e.button !== 0) return
@@ -130,7 +131,7 @@ function onResizeStart(e: PointerEvent, c: TableColumn<R>) {
   handle.focus()
   // En écriture de droite à gauche, la poignée est sur le bord gauche : le sens s'inverse.
   const sign = getComputedStyle(handle).direction === 'rtl' ? -1 : 1
-  drag = { startX: e.clientX, startWidth: widthOf(c), sign }
+  drag = { startX: e.clientX, startWidth: widthOf(c), startWidths: widths.value, sign }
   resizing.value = c.name
   document.documentElement.classList.add('socle-table-resizing')
 }
@@ -170,9 +171,9 @@ function onResizeKeydown(e: KeyboardEvent, c: TableColumn<R>) {
       setWidth(c, c.maxWidth)
       break
     case 'Escape':
-      // Pendant un glisser : annule et rend la largeur de départ.
+      // Pendant un glisser : annule, et rend v-model:widths tel qu'il était (sans entrée ajoutée).
       if (!drag) return
-      setWidth(c, drag.startWidth)
+      widths.value = drag.startWidths
       stopResize()
       break
     default:

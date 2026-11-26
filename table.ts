@@ -28,7 +28,7 @@ export interface TableColumn<R = any> {
   sortable?: boolean
   /** Largeur initiale en pixels (défaut : 160). */
   width?: number
-  /** Largeur minimale en pixels (défaut : 48). */
+  /** Largeur minimale en pixels (défaut : 80, de quoi garder « Abc… » et la flèche de tri lisibles). */
   minWidth?: number
   /** Largeur maximale en pixels (pas de limite par défaut). */
   maxWidth?: number
@@ -41,7 +41,7 @@ export interface TableColumn<R = any> {
 }
 
 export const DEFAULT_COLUMN_WIDTH = 160
-export const DEFAULT_COLUMN_MIN_WIDTH = 48
+export const DEFAULT_COLUMN_MIN_WIDTH = 80
 
 /** Valeur vide : placée en fin de liste, quel que soit le sens du tri. */
 function isEmpty(v: unknown): boolean {
