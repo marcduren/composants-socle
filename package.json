@@ -2,6 +2,16 @@
   "name": "socle",
   "version": "0.1.4",
   "description": "Composants Vue 3 accessibles, bâtis sur les éléments natifs du navigateur (<dialog>, popover, CSS Anchor Positioning).",
+  "license": "MIT",
+  "author": "Marc DUREN",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/marcduren/composants-socle.git"
+  },
+  "homepage": "https://github.com/marcduren/composants-socle#readme",
+  "bugs": {
+    "url": "https://github.com/marcduren/composants-socle/issues"
+  },
   "type": "module",
   "main": "./index.ts",
   "exports": {

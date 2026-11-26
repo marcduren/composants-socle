@@ -38,9 +38,15 @@ Côté navigateurs, les composants reposent sur `<dialog>`, l'attribut `popover`
 
 ## 2. Installer le paquet
 
-Socle n'est pas publié sur le registre npm. Trois façons de l'installer, selon l'usage.
+Quatre façons de l'installer, selon l'usage.
 
-### Depuis le dépôt Git (recommandé pour une application)
+### Depuis le registre npm (recommandé pour une application)
+
+```sh
+npm install socle
+```
+
+### Depuis le dépôt Git (pour une version non encore publiée)
 
 ```sh
 npm install "github:marcduren/composants-socle#v0.1.4"
@@ -192,7 +198,7 @@ Le détail des props, slots et événements de chaque composant est dans le [REA
 
 | Étape | Fichier | À faire |
 | --- | --- | --- |
-| Installation | `package.json` | `npm install` depuis Git, un dossier ou une archive |
+| Installation | `package.json` | `npm install socle`, ou depuis Git, un dossier ou une archive |
 | Vite | `vite.config.ts` | plugins `vue()` et `tailwindcss()`, `resolve.dedupe: ['vue']` |
 | Tailwind | `src/style.css` | `@source "../node_modules/socle";` après `@import "tailwindcss";` |
 | TypeScript | `tsconfig.json` | `"moduleResolution": "Bundler"` |
