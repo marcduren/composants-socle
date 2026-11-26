@@ -29,6 +29,8 @@ Composants Vue 3 accessibles, bâtis sur les éléments natifs du navigateur : `
 
 ## Installation
 
+> Le guide [INTEGRATION.md](INTEGRATION.md) détaille l'intégration dans un projet Vite + Vue + Tailwind, étape par étape : installation du paquet, configuration de Vite, Tailwind et TypeScript, et problèmes fréquents.
+
 ```ts
 import { SocleInput, SocleSelect, SocleDatePicker, SocleDialog } from 'socle'
 ```
