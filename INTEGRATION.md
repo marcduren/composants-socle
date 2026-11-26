@@ -43,9 +43,9 @@ Socle n'est pas publié sur le registre npm. Trois façons de l'installer, selon
 ### Depuis le dépôt Git (recommandé pour une application)
 
 ```sh
-npm install "github:marcduren/composants-socle#<tag-ou-commit>"
+npm install "github:marcduren/composants-socle#v0.1.0"
 # forme longue équivalente :
-# npm install "git+https://github.com/marcduren/composants-socle.git#<tag-ou-commit>"
+# npm install "git+https://github.com/marcduren/composants-socle.git#v0.1.0"
 ```
 
 - Indiquez un tag ou un commit après `#` pour figer la version. Sans cela, `npm install` peut récupérer une autre version d'une machine à l'autre.
