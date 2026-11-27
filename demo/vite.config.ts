@@ -9,8 +9,8 @@ const socle = fileURLToPath(new URL('..', import.meta.url))
 export default defineConfig({
   plugins: [vue(), tailwindcss()],
   resolve: {
-    // `import … from 'socle'` pointe sur les sources du dossier parent, comme un paquet installé.
-    alias: { socle: socle },
+    // `import … from 'socle-ui'` pointe sur les sources du dossier parent, comme un paquet installé.
+    alias: { 'socle-ui': socle },
     // Les composants sont hors de demo/ : sans dedupe, `import 'vue'` y chercherait
     // un autre node_modules, et deux copies de Vue cohabiteraient.
     dedupe: ['vue'],

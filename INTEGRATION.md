@@ -43,7 +43,7 @@ Quatre façons de l'installer, selon l'usage.
 ### Depuis le registre npm (recommandé pour une application)
 
 ```sh
-npm install socle
+npm install socle-ui
 ```
 
 ### Depuis le dépôt Git (pour une version non encore publiée)
@@ -63,20 +63,20 @@ npm install "github:marcduren/composants-socle#v0.1.5"
 npm install ../composants-socle
 ```
 
-npm crée un **lien symbolique** `node_modules/socle` vers le dossier : toute modification d'un composant est visible immédiatement dans l'application. Ce mode demande le réglage `dedupe` décrit à l'[étape 3](#3-configurer-vite).
+npm crée un **lien symbolique** `node_modules/socle-ui` vers le dossier : toute modification d'un composant est visible immédiatement dans l'application. Ce mode demande le réglage `dedupe` décrit à l'[étape 3](#3-configurer-vite).
 
 ### Depuis une archive
 
 Dans le dossier de Socle :
 
 ```sh
-npm pack            # produit socle-0.1.5.tgz
+npm pack            # produit socle-ui-0.1.5.tgz
 ```
 
 Puis dans l'application :
 
 ```sh
-npm install ../chemin/vers/socle-0.1.5.tgz
+npm install ../chemin/vers/socle-ui-0.1.5.tgz
 ```
 
 L'archive ne contient que les fichiers listés dans le champ `files` du `package.json` : composants, `index.ts`, `classes.ts`, `table.ts` et `socle.css`.
@@ -93,7 +93,7 @@ import { defineConfig } from 'vite'
 export default defineConfig({
   plugins: [vue(), tailwindcss()],
   resolve: {
-    // Une seule copie de Vue, même si socle est installé par lien symbolique.
+    // Une seule copie de Vue, même si socle-ui est installé par lien symbolique.
     dedupe: ['vue'],
   },
 })
@@ -109,10 +109,10 @@ Dans la feuille CSS principale de l'application (par exemple `src/style.css`) :
 
 ```css
 @import "tailwindcss";
-@source "../node_modules/socle";
+@source "../node_modules/socle-ui";
 ```
 
-- Le chemin est **relatif à la feuille CSS**. Depuis `src/style.css`, `../node_modules/socle` est correct. Adaptez-le si la feuille est ailleurs.
+- Le chemin est **relatif à la feuille CSS**. Depuis `src/style.css`, `../node_modules/socle-ui` est correct. Adaptez-le si la feuille est ailleurs.
 - Vérifiez que cette feuille est bien importée au démarrage, par exemple dans `src/main.ts` :
 
   ```ts
@@ -139,8 +139,8 @@ Dans `tsconfig.json` (ou `tsconfig.app.json` selon le modèle Vite) :
 }
 ```
 
-- `"moduleResolution": "Bundler"` est nécessaire pour que TypeScript lise le champ `exports` du paquet (`socle`, `socle/SocleSelect.vue`, `socle/classes`). C'est déjà le réglage par défaut des modèles Vite.
-- Les fichiers `.vue` doivent être déclarés, ce que fait déjà `vue-tsc`. Si l'éditeur signale `Cannot find module 'socle/SocleSelect.vue'`, vérifiez que l'extension Vue (Vue - Official) est active.
+- `"moduleResolution": "Bundler"` est nécessaire pour que TypeScript lise le champ `exports` du paquet (`socle-ui`, `socle-ui/SocleSelect.vue`, `socle-ui/classes`). C'est déjà le réglage par défaut des modèles Vite.
+- Les fichiers `.vue` doivent être déclarés, ce que fait déjà `vue-tsc`. Si l'éditeur signale `Cannot find module 'socle-ui/SocleSelect.vue'`, vérifiez que l'extension Vue (Vue - Official) est active.
 - Socle contient des sources `.ts` et non des fichiers de déclaration `.d.ts`. `vue-tsc` vérifie donc aussi le code de Socle, avec les options du projet : `skipLibCheck` ne s'applique pas à ces fichiers. Le code passe la vérification de la démo, qui est en `strict` avec `noUncheckedIndexedAccess`, ce qui couvre la plupart des configurations.
 
 ## 6. Utiliser les composants
@@ -150,8 +150,8 @@ Dans `tsconfig.json` (ou `tsconfig.app.json` selon le modèle Vite) :
 ```vue
 <script setup lang="ts">
 import { ref } from 'vue'
-import { SocleInput, SocleSelect, SocleDatePicker, SocleDialog } from 'socle'
-import type { SelectOption } from 'socle'
+import { SocleInput, SocleSelect, SocleDatePicker, SocleDialog } from 'socle-ui'
+import type { SelectOption } from 'socle-ui'
 
 const email = ref('')
 const country = ref<string | null>(null)
@@ -181,7 +181,7 @@ const countries: SelectOption<string>[] = [
 ### Import d'un seul composant
 
 ```ts
-import SocleSelect from 'socle/SocleSelect.vue'
+import SocleSelect from 'socle-ui/SocleSelect.vue'
 ```
 
 ### Classes partagées
@@ -189,7 +189,7 @@ import SocleSelect from 'socle/SocleSelect.vue'
 Pour habiller un contrôle maison comme les champs Socle :
 
 ```ts
-import { fieldBoxClass } from 'socle/classes'
+import { fieldBoxClass } from 'socle-ui/classes'
 ```
 
 Le détail des props, slots et événements de chaque composant est dans le [README](README.md).
@@ -198,20 +198,20 @@ Le détail des props, slots et événements de chaque composant est dans le [REA
 
 | Étape | Fichier | À faire |
 | --- | --- | --- |
-| Installation | `package.json` | `npm install socle`, ou depuis Git, un dossier ou une archive |
+| Installation | `package.json` | `npm install socle-ui`, ou depuis Git, un dossier ou une archive |
 | Vite | `vite.config.ts` | plugins `vue()` et `tailwindcss()`, `resolve.dedupe: ['vue']` |
-| Tailwind | `src/style.css` | `@source "../node_modules/socle";` après `@import "tailwindcss";` |
+| Tailwind | `src/style.css` | `@source "../node_modules/socle-ui";` après `@import "tailwindcss";` |
 | TypeScript | `tsconfig.json` | `"moduleResolution": "Bundler"` |
-| Code | composants | `import { … } from 'socle'` |
+| Code | composants | `import { … } from 'socle-ui'` |
 
 ## 8. Problèmes fréquents
 
 | Symptôme | Cause probable | Solution |
 | --- | --- | --- |
 | Composants affichés sans style (bordures, couleurs, espacements absents) | Tailwind n'analyse pas le paquet | Ajouter `@source` avec le bon chemin relatif ([étape 4](#4-configurer-tailwind)) |
-| Liste, calendrier ou dialogue sans animation ni positionnement | `socle.css` non chargé, ou navigateur trop ancien | Importer les composants depuis `socle` (pas de copie des fichiers), vérifier la prise en charge de l'Anchor Positioning |
+| Liste, calendrier ou dialogue sans animation ni positionnement | `socle.css` non chargé, ou navigateur trop ancien | Importer les composants depuis `socle-ui` (pas de copie des fichiers), vérifier la prise en charge de l'Anchor Positioning |
 | `Failed to resolve import "vue"` ou avertissement sur plusieurs instances de Vue | Installation par lien symbolique | Ajouter `resolve.dedupe: ['vue']` ([étape 3](#3-configurer-vite)) |
 | `[plugin:vite:vue]` ou `Unknown file extension ".vue"` | Plugin Vue absent | Ajouter `@vitejs/plugin-vue` dans `vite.config.ts` |
-| `Cannot find module 'socle/…'` dans l'éditeur ou `vue-tsc` | Résolution de modules inadaptée | `"moduleResolution": "Bundler"` ([étape 5](#5-configurer-typescript)) |
+| `Cannot find module 'socle-ui/…'` dans l'éditeur ou `vue-tsc` | Résolution de modules inadaptée | `"moduleResolution": "Bundler"` ([étape 5](#5-configurer-typescript)) |
 | Erreurs `vue-tsc` dans les fichiers de Socle | Options TypeScript plus strictes que celles de la démo | Signaler l'erreur sur le dépôt de Socle. En attendant, corriger localement ou assouplir l'option concernée |
 | `npm install` échoue sur l'URL Git | Git absent de la machine, ou tag / commit inexistant après `#` | Installer Git, vérifier la référence sur [GitHub](https://github.com/marcduren/composants-socle) |

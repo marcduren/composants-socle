@@ -5,7 +5,7 @@
   (string, date, number) et une largeur.
 
   Le composant ne trie pas les lignes : il met à jour v-model:sort ({ name, direction }),
-  et l'appelant trie ses données, avec sortRows() (socle/table) ou sa propre fonction.
+  et l'appelant trie ses données, avec sortRows() (socle-ui/table) ou sa propre fonction.
 
   <table>
     <thead>

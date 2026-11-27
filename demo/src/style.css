@@ -1,5 +1,5 @@
 @import "tailwindcss";
 
 /* Classes Tailwind utilisées par les composants Socle (fichiers du dossier parent).
-   Dans une application qui installe le paquet : @source "../node_modules/socle"; */
+   Dans une application qui installe le paquet : @source "../node_modules/socle-ui"; */
 @source "../../*.{vue,ts}";

@@ -34,13 +34,13 @@ Composants Vue 3 accessibles, bâtis sur les éléments natifs du navigateur : `
 > Le guide [INTEGRATION.md](INTEGRATION.md) détaille l'intégration dans un projet Vite + Vue + Tailwind, étape par étape : installation du paquet, configuration de Vite, Tailwind et TypeScript, et problèmes fréquents.
 
 ```ts
-import { SocleInput, SocleSelect, SocleDatePicker, SocleDialog, SoclePopover } from 'socle'
+import { SocleInput, SocleSelect, SocleDatePicker, SocleDialog, SoclePopover } from 'socle-ui'
 ```
 
 Chaque composant peut aussi être importé seul :
 
 ```ts
-import SocleSelect from 'socle/SocleSelect.vue'
+import SocleSelect from 'socle-ui/SocleSelect.vue'
 ```
 
 ### Configuration de Tailwind
@@ -49,7 +49,7 @@ Tailwind v4 ignore `node_modules` lors de la détection automatique des sources.
 
 ```css
 @import "tailwindcss";
-@source "../node_modules/socle";
+@source "../node_modules/socle-ui";
 ```
 
 Le chemin est relatif à cette feuille CSS : adaptez-le à votre projet.
@@ -67,7 +67,7 @@ npm run dev        # serveur de développement
 npm run build      # vérification des types (vue-tsc) + build de production
 ```
 
-Elle importe `socle` directement depuis les sources du dossier parent (alias dans `vite.config.ts`) : toute modification d'un composant est visible immédiatement. `npm run typecheck` vérifie aussi les types des composants eux-mêmes.
+Elle importe `socle-ui` directement depuis les sources du dossier parent (alias dans `vite.config.ts`) : toute modification d'un composant est visible immédiatement. `npm run typecheck` vérifie aussi les types des composants eux-mêmes.
 
 ## Principes communs
 
@@ -183,7 +183,7 @@ En plus des [props communes](#champs-de-formulaire) :
 | `ariaLabel` | `string` | | Nom accessible quand il n'y a pas de `label` visible. À défaut, c'est le placeholder qui sert de nom. |
 
 ```ts
-import type { SelectOption } from 'socle'
+import type { SelectOption } from 'socle-ui'
 
 interface SelectOption<V> {
   value: V          // string | number
@@ -415,7 +415,7 @@ Ligne d'en-têtes d'un tableau, à placer entre `<thead>` et `</thead>`. Les col
 ```vue
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import { SocleTableHead, sortRows, type TableColumn, type TableSort } from 'socle'
+import { SocleTableHead, sortRows, type TableColumn, type TableSort } from 'socle-ui'
 
 const columns: TableColumn<Order>[] = [
   { name: 'ref', label: 'Référence', sortable: true, width: 150 },
@@ -458,7 +458,7 @@ const rows = computed(() => sortRows(orders.value, columns, sort.value))
 | `labels` | `Partial<{ resize: string }>` | | Nom accessible des poignées, suivi du libellé de la colonne (défaut : « Redimensionner la colonne »). |
 
 ```ts
-import type { TableColumn, TableSort } from 'socle'
+import type { TableColumn, TableSort } from 'socle-ui'
 
 interface TableColumn<R> {
   name: string                         // identifiant, transmis au tri ; sortRows() lit row[name]
@@ -585,7 +585,7 @@ Les animations sont désactivées quand l'utilisateur a demandé à réduire les
 Classes Tailwind communes aux composants. `fieldBoxClass()` donne le cadre d'un champ : bordure, anneau de focus, état d'erreur et survol.
 
 ```ts
-import { fieldBoxClass } from 'socle/classes'
+import { fieldBoxClass } from 'socle-ui/classes'
 
 fieldBoxClass({ focus: 'within', error: props.error, disabled: props.disabled })
 ```

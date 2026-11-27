@@ -14,7 +14,7 @@ import {
   type SelectOption,
   type TableColumn,
   type TableSort,
-} from 'socle'
+} from 'socle-ui'
 
 /* ---------- Formulaire ---------- */
 const form = reactive({

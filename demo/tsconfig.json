@@ -19,10 +19,10 @@
       "vite/client"
     ],
     "paths": {
-      "socle": [
+      "socle-ui": [
         "../index.ts"
       ],
-      "socle/*": [
+      "socle-ui/*": [
         "../*"
       ],
       "vue": [
