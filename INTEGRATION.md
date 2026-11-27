@@ -49,9 +49,9 @@ npm install socle-ui
 ### Depuis le dépôt Git (pour une version non encore publiée)
 
 ```sh
-npm install "github:marcduren/composants-socle#v0.1.5"
+npm install "github:marcduren/composants-socle#v0.1.6"
 # forme longue équivalente :
-# npm install "git+https://github.com/marcduren/composants-socle.git#v0.1.5"
+# npm install "git+https://github.com/marcduren/composants-socle.git#v0.1.6"
 ```
 
 - Indiquez un tag ou un commit après `#` pour figer la version. Sans cela, `npm install` peut récupérer une autre version d'une machine à l'autre.
@@ -70,13 +70,13 @@ npm crée un **lien symbolique** `node_modules/socle-ui` vers le dossier : toute
 Dans le dossier de Socle :
 
 ```sh
-npm pack            # produit socle-ui-0.1.5.tgz
+npm pack            # produit socle-ui-0.1.6.tgz
 ```
 
 Puis dans l'application :
 
 ```sh
-npm install ../chemin/vers/socle-ui-0.1.5.tgz
+npm install ../chemin/vers/socle-ui-0.1.6.tgz
 ```
 
 L'archive ne contient que les fichiers listés dans le champ `files` du `package.json` : composants, `index.ts`, `classes.ts`, `table.ts` et `socle.css`.
