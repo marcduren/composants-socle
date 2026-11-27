@@ -49,18 +49,18 @@ npm install socle-ui
 ### Depuis le dépôt Git (pour une version non encore publiée)
 
 ```sh
-npm install "github:marcduren/composants-socle#v0.1.6"
+npm install "github:marcduren/socle-ui#v0.1.6"
 # forme longue équivalente :
-# npm install "git+https://github.com/marcduren/composants-socle.git#v0.1.6"
+# npm install "git+https://github.com/marcduren/socle-ui.git#v0.1.6"
 ```
 
 - Indiquez un tag ou un commit après `#` pour figer la version. Sans cela, `npm install` peut récupérer une autre version d'une machine à l'autre.
-- Le dépôt est public sur GitHub ([marcduren/composants-socle](https://github.com/marcduren/composants-socle)) : aucune authentification n'est nécessaire pour l'installer.
+- Le dépôt est public sur GitHub ([marcduren/socle-ui](https://github.com/marcduren/socle-ui)) : aucune authentification n'est nécessaire pour l'installer.
 
 ### Depuis un dossier local (pour développer Socle et l'application en même temps)
 
 ```sh
-npm install ../composants-socle
+npm install ../socle-ui
 ```
 
 npm crée un **lien symbolique** `node_modules/socle-ui` vers le dossier : toute modification d'un composant est visible immédiatement dans l'application. Ce mode demande le réglage `dedupe` décrit à l'[étape 3](#3-configurer-vite).
@@ -214,4 +214,4 @@ Le détail des props, slots et événements de chaque composant est dans le [REA
 | `[plugin:vite:vue]` ou `Unknown file extension ".vue"` | Plugin Vue absent | Ajouter `@vitejs/plugin-vue` dans `vite.config.ts` |
 | `Cannot find module 'socle-ui/…'` dans l'éditeur ou `vue-tsc` | Résolution de modules inadaptée | `"moduleResolution": "Bundler"` ([étape 5](#5-configurer-typescript)) |
 | Erreurs `vue-tsc` dans les fichiers de Socle | Options TypeScript plus strictes que celles de la démo | Signaler l'erreur sur le dépôt de Socle. En attendant, corriger localement ou assouplir l'option concernée |
-| `npm install` échoue sur l'URL Git | Git absent de la machine, ou tag / commit inexistant après `#` | Installer Git, vérifier la référence sur [GitHub](https://github.com/marcduren/composants-socle) |
+| `npm install` échoue sur l'URL Git | Git absent de la machine, ou tag / commit inexistant après `#` | Installer Git, vérifier la référence sur [GitHub](https://github.com/marcduren/socle-ui) |
