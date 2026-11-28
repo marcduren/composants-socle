@@ -1,6 +1,6 @@
 # Intégrer Socle dans un projet Vite + Vue + Tailwind
 
-Ce guide décrit comment utiliser les composants Socle dans une application Vite + Vue 3 + Tailwind CSS v4. Pour la description des composants eux-mêmes, voir le [README](README.md).
+Ce guide décrit comment utiliser les composants Socle dans une application Vite + Vue 3 + Tailwind CSS v4. Pour la description des composants eux-mêmes, voir le [README](README.md) et le dossier [`docs/`](docs/) (un fichier par composant).
 
 Socle est distribué **en sources** (`.vue`, `.ts`), sans étape de build : c'est le Vite de l'application qui compile les composants. L'intégration consiste donc à installer le paquet, puis à régler Vite, Tailwind et, si besoin, TypeScript.
 
@@ -192,7 +192,7 @@ Pour habiller un contrôle maison comme les champs Socle :
 import { fieldBoxClass } from 'socle-ui/classes'
 ```
 
-Le détail des props, slots et événements de chaque composant est dans le [README](README.md).
+Le détail des props, slots et événements de chaque composant est dans son fichier du dossier [`docs/`](docs/) (par exemple [`docs/SocleSelect.md`](docs/SocleSelect.md)).
 
 ## 7. Récapitulatif
 
