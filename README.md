@@ -9,6 +9,7 @@ Composants Vue 3 accessibles, bâtis sur les éléments natifs du navigateur : `
 | [`SocleDatePicker`](docs/SocleDatePicker.md) | Sélecteur de date avec calendrier |
 | [`SocleDialog`](docs/SocleDialog.md) | Boîte de dialogue déplaçable, modale ou non |
 | [`SoclePopover`](docs/SoclePopover.md) | Panneau flottant ancré à un bouton (menu, aide, petit formulaire) |
+| [`SocleTabs`](docs/SocleTabs.md) | Onglets accessibles, trouvables par la recherche du navigateur |
 | [`SocleTableHead`](docs/SocleTableHead.md) | En-têtes de tableau : colonnes redimensionnables et triables |
 | [`SocleField`](docs/SocleField.md) | Habillage commun d'un champ : label, aide, erreur |
 
@@ -28,7 +29,7 @@ La documentation de chaque composant (props, v-model, slots, clavier) est dans s
 - **Vue ≥ 3.5** (`useId`, `defineModel`, composants génériques).
 - **Tailwind CSS v4**.
 - Un bundler qui compile les SFC et le TypeScript (Vite + `@vitejs/plugin-vue`, par exemple). Le paquet est distribué en sources (`.vue`, `.ts`), sans étape de build.
-- Un navigateur récent qui prend en charge `<dialog>`, l'attribut `popover`, le CSS Anchor Positioning et `@starting-style`. La flèche de `SoclePopover` demande en plus les requêtes de conteneur ancré (`container-type: anchored`) : sans elles, elle est simplement masquée.
+- Un navigateur récent qui prend en charge `<dialog>`, l'attribut `popover`, le CSS Anchor Positioning et `@starting-style`. `SocleTabs` utilise `hidden="until-found"` : sans prise en charge, les panneaux masqués restent simplement invisibles à la recherche du navigateur. La flèche de `SoclePopover` demande en plus les requêtes de conteneur ancré (`container-type: anchored`) : sans elles, elle est simplement masquée.
 
 ## Installation
 
@@ -59,7 +60,7 @@ La feuille `socle.css` (animations, ancrage) est importée automatiquement par l
 
 ## Démo
 
-Le dossier `demo/` contient une application Vite + Vue 3 + Tailwind CSS v4 qui utilise tous les composants : formulaire avec validation, affichage du `v-model` et des données envoyées, tableau triable aux colonnes redimensionnables, popovers (placements, menu, filtres persistants), boîtes de dialogue modale, non modale et de confirmation.
+Le dossier `demo/` contient une application Vite + Vue 3 + Tailwind CSS v4 qui utilise tous les composants : formulaire avec validation, affichage du `v-model` et des données envoyées, tableau triable aux colonnes redimensionnables, popovers (placements, menu, filtres persistants), onglets horizontaux et verticaux, boîtes de dialogue modale, non modale et de confirmation.
 
 ```sh
 cd demo
@@ -139,6 +140,7 @@ SocleSelect.vue
 SocleDatePicker.vue
 SocleDialog.vue
 SoclePopover.vue      Panneau flottant ancré (popover + anchor positioning)
+SocleTabs.vue         Onglets (tablist / tabpanel)
 SocleTableHead.vue    En-têtes de tableau redimensionnables et triables
 table.ts              Types des colonnes et fonction de tri sortRows()
 socle.css             Styles globaux (animations, ancrage)

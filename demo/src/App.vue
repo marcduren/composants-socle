@@ -8,10 +8,12 @@ import {
   SoclePopover,
   SocleSelect,
   SocleTableHead,
+  SocleTabs,
   sortRows,
   type PopoverAlign,
   type PopoverPlacement,
   type SelectOption,
+  type TabItem,
   type TableColumn,
   type TableSort,
 } from 'socle-ui'
@@ -104,6 +106,21 @@ const placement = ref<PopoverPlacement>('bottom')
 const align = ref<PopoverAlign>('center')
 const filtersOpen = ref(false)
 const filters = reactive({ country: null as string | null, onlyLate: false })
+
+/* ---------- Onglets ---------- */
+const tabs: TabItem<string>[] = [
+  { value: 'general', label: 'Général' },
+  { value: 'delivery', label: 'Livraison' },
+  { value: 'billing', label: 'Facturation' },
+  { value: 'archive', label: 'Archives', disabled: true },
+]
+const tab = ref<string | null>(null)
+const settingsTab = ref<string | null>('notifications')
+const settingsTabs: TabItem<string>[] = [
+  { value: 'profile', label: 'Profil' },
+  { value: 'notifications', label: 'Notifications' },
+  { value: 'security', label: 'Sécurité' },
+]
 
 /* ---------- Tableau ---------- */
 interface Order {
@@ -359,6 +376,50 @@ const btnSecondary = `${btn} border border-slate-300 bg-white text-slate-700 hov
           <SocleSelect v-model="placement" label="placement" :options="placements.map((p) => ({ value: p, label: p }))" />
           <SocleSelect v-model="align" label="align" :options="aligns.map((a) => ({ value: a, label: a }))" />
         </div>
+      </div>
+    </section>
+
+    <!-- ===================== Onglets ===================== -->
+    <section class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+      <h2 id="tabs-title" class="mb-2 text-lg font-semibold">Onglets</h2>
+      <p class="mb-4 text-sm text-slate-600">
+        Flèches, Début / Fin pour changer d'onglet. Cherchez « Colissimo » avec Ctrl+F : l'onglet Livraison
+        s'ouvre tout seul (<code>hidden="until-found"</code>).
+      </p>
+
+      <div class="grid gap-8 lg:grid-cols-2">
+        <div>
+          <SocleTabs v-model="tab" :tabs="tabs" aria-labelledby="tabs-title">
+            <template #general>
+              <div class="grid gap-4">
+                <SocleInput v-model.trim="form.name" label="Nom" hint="Changez d'onglet : la saisie est conservée." />
+                <SocleSelect v-model="form.country" label="Pays" :options="countries" />
+              </div>
+            </template>
+            <template #delivery>
+              <p class="text-sm text-slate-600">Transporteur : Colissimo, livraison en 48 h ouvrées.</p>
+            </template>
+            <template #billing>
+              <p class="text-sm text-slate-600">Facture envoyée par e-mail à la validation de la commande.</p>
+            </template>
+          </SocleTabs>
+          <p class="mt-3 text-sm text-slate-600">v-model : <code>{{ JSON.stringify(tab) }}</code></p>
+        </div>
+
+        <SocleTabs v-model="settingsTab" :tabs="settingsTabs" orientation="vertical" activation="manual" lazy aria-label="Paramètres">
+          <template #tab="{ tab: t, selected }">
+            <span class="flex items-center gap-2">
+              <span class="size-1.5 rounded-full" :class="selected ? 'bg-teal-600' : 'bg-slate-300'" aria-hidden="true" />
+              {{ t.label }}
+            </span>
+          </template>
+          <template #default="{ tab: t }">
+            <h3 class="font-medium">{{ t.label }}</h3>
+            <p class="mt-1 text-sm text-slate-600">
+              Vertical, activation manuelle (Entrée / Espace) et rendu à la première sélection (<code>lazy</code>).
+            </p>
+          </template>
+        </SocleTabs>
       </div>
     </section>
 
