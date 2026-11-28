@@ -60,7 +60,7 @@ La feuille `socle.css` (animations, ancrage) est importée automatiquement par l
 
 ## Démo
 
-Le dossier `demo/` contient une application Vite + Vue 3 + Tailwind CSS v4 qui utilise tous les composants : formulaire avec validation, affichage du `v-model` et des données envoyées, tableau triable aux colonnes redimensionnables, popovers (placements, menu, filtres persistants), onglets horizontaux et verticaux, boîtes de dialogue modale, non modale et de confirmation.
+Le dossier `demo/` contient une application Vite + Vue 3 + Tailwind CSS v4 qui utilise tous les composants, une page par famille avec une barre latérale de navigation (`demo/src/pages/`) : formulaire avec validation, affichage du `v-model` et des données envoyées, tableau triable aux colonnes redimensionnables, popovers (placements, menu, filtres persistants), onglets horizontaux et verticaux, boîtes de dialogue modale, non modale et de confirmation.
 
 ```sh
 cd demo
