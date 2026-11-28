@@ -1,6 +1,6 @@
 {
   "name": "socle-ui",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "Composants Vue 3 accessibles, bâtis sur les éléments natifs du navigateur (<dialog>, popover, CSS Anchor Positioning).",
   "license": "MIT",
   "author": "Marc DUREN",
